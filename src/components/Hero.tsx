@@ -43,10 +43,10 @@ const Hero = () => {
           className="hero-text"
         >
           <span className="hero-tagline">Excellence in Craftsmanship</span>
-          <h1>Premium Home Remodeling in <span className="highlight-text">San Francisco</span> & San Mateo County</h1>
-          <p>Elevating homes through master carpentry and high-end design. From kitchens to whole-house renovations, we bring precision to every square inch.</p>
+          <h1>Premium Home Design & Remodeling in <span className="highlight-text">San Francisco</span> & San Mateo County</h1>
+          <p>Experience classy home upgrades from kitchens to ADUs, delivered with craftsmanship, transparency, and lasting value by a top-rated San Francisco Bay Area contractor.</p>
           <div className="hero-btns">
-            <a href="#quote" className="btn-primary">Get My Free Quote</a>
+            <a href="#quote" className="btn-primary">Get A Free Quote</a>
             <a href="#services" className="btn-secondary">Explore Services</a>
           </div>
         </motion.div>

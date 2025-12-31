@@ -13,11 +13,11 @@ const About = () => {
             className="about-image-wrapper"
           >
             <div className="experience-badge">
-              <span className="years">15+</span>
+              <span className="years">12+</span>
               <span className="text">Years of Excellence</span>
             </div>
             <img
-              src="/public/mauricio.png"
+              src="/mauricio.png"
               alt="Master Carpenter at Work"
               className="about-img"
             />

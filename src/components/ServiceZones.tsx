@@ -131,19 +131,36 @@ const ServiceZones = () => {
           }
 
           .cities-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
           }
 
           .city-item {
-            padding: 1rem;
-            font-size: 0.9rem;
+            padding: 0.7rem 1rem;
+            font-size: 0.85rem;
+            gap: 0.4rem;
           }
         }
 
         @media (max-width: 480px) {
           .cities-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem;
+          }
+
+          .city-item {
+            padding: 0.5rem 0.7rem;
+            font-size: 0.75rem;
+            gap: 0.4rem;
+          }
+
+          .city-icon {
+            width: 14px;
+            height: 14px;
+          }
+          
+          .service-zones-section h2 {
+            font-size: 2rem;
           }
         }
       `}</style>

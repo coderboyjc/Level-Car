@@ -51,9 +51,16 @@ const Testimonials = () => {
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
+
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
-    const timer = setInterval(nextSlide, 5000);
-    return () => clearInterval(timer);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const getCardStyle = (index: number) => {
@@ -67,6 +74,28 @@ const Testimonials = () => {
     const isNext = normalizedDiff === 1;
     const isPrev = normalizedDiff === -1;
 
+    if (isMobile) {
+      // Mobile: Simple Stack/Fade
+      if (isActive) {
+        return {
+          zIndex: 5,
+          opacity: 1,
+          scale: 1,
+          x: 0,
+          display: 'flex' // Ensure it's visible
+        };
+      } else {
+        return {
+          zIndex: 0,
+          opacity: 0,
+          scale: 0.8,
+          x: 0,
+          display: 'none' // Hide others to prevent overlap issues
+        };
+      }
+    }
+
+    // Desktop: 3D Carousel
     if (isActive) {
       return {
         zIndex: 5,
@@ -359,18 +388,9 @@ const Testimonials = () => {
           }
 
           .testimonial-card {
-            max-width: 90%;
+            max-width: 100%;
             padding: 2.5rem 1.5rem;
-            x: 0 !important;
-            rotateY: 0 !important;
-            opacity: 0 !important;
-          }
-
-          .testimonial-card.active {
-            opacity: 1 !important;
-            scale: 1 !important;
-            zIndex: 5 !important;
-            filter: blur(0px) !important;
+            width: 90%; /* Center it */
           }
 
           .testimonial-text {

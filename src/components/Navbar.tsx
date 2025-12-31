@@ -190,10 +190,10 @@ const Navbar = () => {
             flex-direction: column;
             padding: 3rem 2rem;
             gap: 2rem;
-            transform: translateY(-100%);
+            transform: translateY(-20px); /* Start slightly higher for fade-in effect */
             opacity: 0;
             pointer-events: none;
-            transition: var(--transition);
+            transition: all 0.4s ease-in-out; /* Smooth transition for everything */
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
           }
 
@@ -212,6 +212,25 @@ const Navbar = () => {
             transform: translateY(0);
             opacity: 1;
             pointer-events: all;
+          }
+
+          /* FORCE mobile menu links to be white always */
+          .nav-links a {
+            color: var(--white) !important;
+          }
+
+          /* Ensure Desktop specific rules don't bleed into mobile via media query separation if needed, 
+             but here strictly overriding for mobile scope */
+          
+          /* We need to be careful with !important, but for mobile menu overlay on black bg it is required */
+          .navbar.scrolled .nav-links a:not(.nav-cta) {
+            color: var(--white) !important;
+          }
+
+          /* Mobile Call Button */
+          .navbar.scrolled .nav-links .nav-call {
+             color: var(--white) !important;
+             border-color: var(--white) !important;
           }
         }
       `}</style>
