@@ -1,69 +1,69 @@
 import { motion } from 'framer-motion';
 
 const ContactForm = () => {
-    return (
-        <section id="quote" className="section-padding contact-section">
-            <div className="container contact-container">
-                <div className="contact-info">
-                    <span className="tagline">Start Your Project</span>
-                    <h2>Request a <span className="highlight-text">Consultation</span></h2>
-                    <p>Ready to level up your home? Fill out the form below and we'll get back to you within 12 hours to schedule a walkthrough.</p>
+  return (
+    <section id="quote" className="section-padding contact-section">
+      <div className="container contact-container">
+        <div className="contact-info">
+          <span className="tagline">Start Your Project</span>
+          <h2>Request a <span className="highlight-text">Consultation</span></h2>
+          <p>Ready to level up your home? Fill out the form below and we'll get back to you within 12 hours to schedule a walkthrough.</p>
 
-                    <div className="contact-details">
-                        <div className="detail-item">
-                            <strong>Location:</strong>
-                            <span>San Francisco & San Mateo County</span>
-                        </div>
-                        <div className="detail-item">
-                            <strong>Specialization:</strong>
-                            <span>High-End Kitchens & Bathrooms</span>
-                        </div>
-                    </div>
-                </div>
-
-                <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6 }}
-                    viewport={{ once: true }}
-                    className="form-wrapper"
-                >
-                    <form className="quote-form" onSubmit={(e) => e.preventDefault()}>
-                        <div className="form-group">
-                            <label htmlFor="name">Full Name</label>
-                            <input type="text" id="name" placeholder="John Doe" required />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="email">Email Address</label>
-                            <input type="email" id="email" placeholder="john@example.com" required />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="phone">Phone Number</label>
-                            <input type="tel" id="phone" placeholder="(555) 000-0000" required />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="service">Service Interested In</label>
-                            <select id="service" required>
-                                <option value="">Select a service</option>
-                                <option value="kitchen">Kitchen Remodeling</option>
-                                <option value="bathroom">Bathroom Renovation</option>
-                                <option value="whole-house">Whole House Remodeling</option>
-                                <option value="outdoor">Patio / Decks / Fencing</option>
-                                <option value="adu">ADU & Room Additions</option>
-                                <option value="new-construction">New Construction / Complete Renovation</option>
-                                <option value="other">Other Service</option>
-                            </select>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="message">Project Details</label>
-                            <textarea id="message" rows={4} placeholder="Tell us about your project..." required></textarea>
-                        </div>
-                        <button type="submit" className="btn-primary w-full">Send Request</button>
-                    </form>
-                </motion.div>
+          <div className="contact-details">
+            <div className="detail-item">
+              <strong>Location:</strong>
+              <span>San Francisco & San Mateo County</span>
             </div>
+            <div className="detail-item">
+              <strong>Specialization:</strong>
+              <span>High-End Kitchens & Bathrooms</span>
+            </div>
+          </div>
+        </div>
 
-            <style>{`
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="form-wrapper"
+        >
+          <form className="quote-form" onSubmit={(e) => e.preventDefault()}>
+            <div className="form-group">
+              <label htmlFor="name">Full Name</label>
+              <input type="text" id="name" placeholder="John Doe" required />
+            </div>
+            <div className="form-group">
+              <label htmlFor="email">Email Address</label>
+              <input type="email" id="email" placeholder="john@example.com" required />
+            </div>
+            <div className="form-group">
+              <label htmlFor="phone">Phone Number</label>
+              <input type="tel" id="phone" placeholder="(555) 000-0000" required />
+            </div>
+            <div className="form-group">
+              <label htmlFor="service">Service Interested In</label>
+              <select id="service" required>
+                <option value="">Select a service</option>
+                <option value="kitchen">Kitchen Remodeling</option>
+                <option value="bathroom">Bathroom Renovation</option>
+                <option value="whole-house">Whole House Remodeling</option>
+                <option value="outdoor">Patio / Decks / Fencing</option>
+                <option value="adu">ADU & Room Additions</option>
+                <option value="new-construction">New Construction / Complete Renovation</option>
+                <option value="other">Other Service</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="message">Project Details</label>
+              <textarea id="message" rows={4} placeholder="Tell us about your project..." required></textarea>
+            </div>
+            <button type="submit" className="btn-primary w-full">Send Request</button>
+          </form>
+        </motion.div>
+      </div>
+
+      <style>{`
         .contact-section {
           background-color: var(--white);
           overflow: hidden;
@@ -200,11 +200,13 @@ const ContactForm = () => {
             grid-template-columns: 1fr;
             gap: 3rem;
             max-width: 100%;
+            width: 100%; /* Force full width */
           }
 
           .contact-info {
             text-align: center;
             padding: 0;
+            max-width: 100%; /* Safety */
           }
 
           .contact-info h2 {
@@ -219,10 +221,21 @@ const ContactForm = () => {
           }
 
           .form-wrapper {
-            padding: 2rem 1.5rem;
-            box-shadow: none;
+            padding: 2rem 1rem; /* Reduced horizontal padding */
+            box-shadow: 10px 10px 0 var(--safety-yellow);
             margin: 0;
             border: 2px solid var(--safety-yellow);
+            width: 100%; /* Ensure it fits in container */
+            max-width: 100%;
+            overflow: hidden; /* Prevent internal overflow */
+          }
+          
+          .form-group input, 
+          .form-group select, 
+          .form-group textarea {
+            width: 100%; /* Force inputs to fit */
+            max-width: 100%;
+            box-sizing: border-box; /* Explicitly ensure border-box */
           }
         }
 
@@ -247,8 +260,8 @@ const ContactForm = () => {
           }
         }
       `}</style>
-        </section>
-    );
+    </section>
+  );
 };
 
 export default ContactForm;
