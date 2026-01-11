@@ -183,52 +183,75 @@ const Hero = () => {
 
         @media (max-width: 768px) {
           .hero {
-            min-height: 100dvh; /* Use dynamic viewport height */
-            padding-bottom: 5rem; /* Space for arrows at bottom */
-            align-items: center; /* Keep vertically centered */
+            min-height: 100dvh;
+            padding-bottom: 5rem;
+            align-items: center;
             display: flex;
           }
 
+          .hero-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+            padding-top: 5rem; /* Add top padding to balance visuals */
+          }
+
+          .hero-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 2rem; /* Consistent large gap to expand content */
+            height: 100%;
+          }
+
           .hero h1 {
-            font-size: 2rem;
+            font-size: 2.25rem; /* Slightly larger again for better fit */
             line-height: 1.1;
-            margin-bottom: 0.75rem; /* Reduced margin */
+            margin-bottom: 0; /* Let gap handle spacing */
           }
           
+          .hero-tagline {
+            margin-bottom: 0;
+            font-size: 0.85rem;
+          }
+
           .hero p {
-            font-size: 1rem;
-            line-height: 1.4;
-            margin-bottom: 1.25rem; /* Reduced margin */
+            font-size: 1.05rem;
+            line-height: 1.5;
+            margin-bottom: 0;
           }
 
           .hero-btns {
             flex-direction: column;
             width: 100%;
-            gap: 0.75rem;
+            gap: 1rem;
           }
 
           .hero-btns a {
             text-align: center;
             width: 100%;
             display: block;
-            padding: 0.875rem 1rem; /* Compact padding */
-            font-size: 0.9rem;
+            padding: 1rem 1.5rem;
+            font-size: 0.95rem;
           }
 
           .slider-nav {
             width: 40px;
             height: 40px;
-            top: auto; /* CRITICAL FIX: Reset top position */
-            bottom: 1.5rem; /* Position at bottom */
+            top: auto;
+            bottom: 1.5rem;
+            transform: none;
           }
 
           .slider-nav.prev {
-            left: 2rem; /* Align with container padding approx */
+            left: 2rem;
             right: auto;
           }
 
           .slider-nav.next {
-            right: 2rem; /* Align with container padding approx */
+            right: 2rem;
             left: auto;
           }
         }
