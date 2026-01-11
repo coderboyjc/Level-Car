@@ -64,7 +64,7 @@ const categories = [
 const Gallery = () => {
   const [filter, setFilter] = useState('kitchen');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const [carouselIndex, setCarouselIndex] = useState(1); // Start with second item for centering logic
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
   const filteredProjects = projects.filter(p => p.category === filter);
 
@@ -145,69 +145,67 @@ const Gallery = () => {
             </AnimatePresence>
           </motion.div>
 
-          {/* Mobile Centered Carousel */}
+          {/* Mobile Centered Carousel - Smooth Animation */}
           <div className="mobile-only gallery-carousel">
             <div className="carousel-wrapper">
               {filteredProjects.map((project, index) => {
-                // Calculate relative position
-                let diff = (index - carouselIndex + filteredProjects.length) % filteredProjects.length;
-                if (diff > filteredProjects.length / 2) diff -= filteredProjects.length;
+                const diff = (index - carouselIndex + filteredProjects.length) % filteredProjects.length;
+                let normalizedDiff = diff;
+                if (diff > filteredProjects.length / 2) normalizedDiff = diff - filteredProjects.length;
 
-                const isActive = diff === 0;
-                const isNext = diff === 1;
-                const isPrev = diff === -1;
+                const isActive = normalizedDiff === 0;
+                const isNext = normalizedDiff === 1;
+                const isPrev = normalizedDiff === -1;
 
-                // Animation state
-                let style = {
-                  zIndex: 0,
-                  opacity: 0,
-                  scale: 0.8,
-                  x: diff > 0 ? '100%' : '-100%',
-                  display: 'none'
-                };
-
+                let slideStyle;
                 if (isActive) {
-                  style = {
+                  slideStyle = {
                     zIndex: 10,
                     opacity: 1,
                     scale: 1,
-                    x: '0%',
-                    display: 'block'
-                  };
-                } else if (isNext) {
-                  style = {
-                    zIndex: 5,
-                    opacity: 0.6,
-                    scale: 0.85,
-                    x: '85%', // Peek from right
-                    display: 'block'
+                    x: 0,
                   };
                 } else if (isPrev) {
-                  style = {
-                    zIndex: 5,
-                    opacity: 0.6,
+                  slideStyle = {
+                    zIndex: 0,
+                    opacity: 0.5,
                     scale: 0.85,
-                    x: '-85%', // Peek from left
-                    display: 'block'
+                    x: '-65%',
+                  };
+                } else if (isNext) {
+                  slideStyle = {
+                    zIndex: 0,
+                    opacity: 0.5,
+                    scale: 0.85,
+                    x: '65%',
+                  };
+                } else {
+                  slideStyle = {
+                    zIndex: 0,
+                    opacity: 0,
+                    scale: 0.7,
+                    x: normalizedDiff > 0 ? '120%' : '-120%',
                   };
                 }
 
                 return (
                   <motion.div
-                    key={index}
-                    className="carousel-slide"
-                    animate={style}
+                    key={project.id}
+                    className={`carousel-slide ${isActive ? 'active' : ''}`}
+                    animate={slideStyle}
                     transition={{
-                      x: { type: "spring", stiffness: 300, damping: 30 },
-                      opacity: { duration: 0.2 },
-                      scale: { duration: 0.2 }
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 30
                     }}
-                    onClick={() => setLightboxIndex(index)}
+                    onClick={() => isActive && setLightboxIndex(index)}
                   >
                     <img src={project.image} alt={project.title} />
-                    <div className="slide-info">
-                      <h3>{project.title}</h3>
-                    </div>
+                    {isActive && (
+                      <div className="slide-info">
+                        <h3>{project.title}</h3>
+                      </div>
+                    )}
                   </motion.div>
                 );
               })}

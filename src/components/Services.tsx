@@ -80,60 +80,42 @@ const Services = () => {
           ))}
         </div>
 
-        {/* Mobile Slider */}
+        {/* Mobile Slider - Smooth Animation (like Testimonials) */}
         <div className="mobile-slider mobile-only">
           <div className="slider-container">
-            <div className="slider-track">
-              {services.map((service, index) => {
-                // Calculate relative position
-                let diff = (index - mobileIndex + services.length) % services.length;
-                if (diff > services.length / 2) diff -= services.length;
+            {services.map((service, index) => {
+              const diff = (index - mobileIndex + services.length) % services.length;
+              let normalizedDiff = diff;
+              if (diff > services.length / 2) normalizedDiff = diff - services.length;
 
-                const isActive = diff === 0;
-                const isNext = diff === 1;
-                const isPrev = diff === -1;
+              const isActive = normalizedDiff === 0;
 
-                // Animation state
-                const validStyle = isActive ? {
-                  zIndex: 5,
-                  opacity: 1,
-                  scale: 1,
-                  x: '0%',
-                  display: 'block'
-                } : {
-                  zIndex: 0,
-                  opacity: 0,
-                  scale: 0.8,
-                  x: diff > 0 ? '100%' : '-100%',
-                  display: 'none' // Hide after transition to prevent interaction
-                };
+              const cardStyle = isActive
+                ? { opacity: 1, scale: 1, x: 0, zIndex: 5, display: 'block' as const }
+                : { opacity: 0, scale: 0.8, x: 0, zIndex: 0, display: 'none' as const };
 
-                // Allow display block during transition if it's immediate neighbor
-                if (isNext || isPrev) validStyle.display = 'block';
-
-                return (
-                  <motion.div
-                    key={index}
-                    className="service-card mobile-card"
-                    animate={validStyle}
-                    transition={{
-                      x: { type: "spring", stiffness: 300, damping: 30 },
-                      opacity: { duration: 0.2 },
-                      scale: { duration: 0.2 }
-                    }}
-                  >
-                    <div className="service-image">
-                      <img src={service.image} alt={service.title} />
-                    </div>
-                    <div className="service-icon-box">{service.icon}</div>
-                    <div className="service-info">
-                      <h3>{service.title}</h3>
-                      <p>{service.description}</p>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
+              return (
+                <motion.div
+                  key={index}
+                  className="service-card mobile-card"
+                  animate={cardStyle}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30
+                  }}
+                >
+                  <div className="service-image">
+                    <img src={service.image} alt={service.title} />
+                  </div>
+                  <div className="service-icon-box">{service.icon}</div>
+                  <div className="service-info">
+                    <h3>{service.title}</h3>
+                    <p>{service.description}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
 
           <div className="slider-controls">
@@ -145,9 +127,7 @@ const Services = () => {
                 <div
                   key={idx}
                   className={`dot ${idx === mobileIndex ? 'active' : ''}`}
-                  onClick={() => {
-                    setMobileIndex(idx);
-                  }}
+                  onClick={() => setMobileIndex(idx)}
                 />
               ))}
             </div>
