@@ -182,40 +182,54 @@ const Hero = () => {
         }
 
         @media (max-width: 768px) {
+          .hero {
+            min-height: 100dvh; /* Use dynamic viewport height */
+            padding-bottom: 5rem; /* Space for arrows at bottom */
+            align-items: center; /* Keep vertically centered */
+            display: flex;
+          }
+
           .hero h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
+            line-height: 1.1;
+            margin-bottom: 0.75rem; /* Reduced margin */
           }
           
           .hero p {
-            font-size: 1.1rem;
+            font-size: 1rem;
+            line-height: 1.4;
+            margin-bottom: 1.25rem; /* Reduced margin */
           }
 
           .hero-btns {
             flex-direction: column;
             width: 100%;
+            gap: 0.75rem;
           }
 
           .hero-btns a {
             text-align: center;
             width: 100%;
             display: block;
+            padding: 0.875rem 1rem; /* Compact padding */
+            font-size: 0.9rem;
           }
 
           .slider-nav {
             width: 40px;
             height: 40px;
-            top: auto;
-            bottom: 2rem;
-            transform: none;
+            top: auto; /* CRITICAL FIX: Reset top position */
+            bottom: 1.5rem; /* Position at bottom */
+            transform: none; /* CRITICAL FIX: Remove centering transform */
           }
 
           .slider-nav.prev {
-            left: calc(50% - 50px);
+            left: 2rem; /* Align with container padding approx */
             right: auto;
           }
 
           .slider-nav.next {
-            right: calc(50% - 50px);
+            right: 2rem; /* Align with container padding approx */
             left: auto;
           }
         }
