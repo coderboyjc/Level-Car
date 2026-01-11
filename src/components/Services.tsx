@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ChefHat, Bath, Home, Trees, PlusSquare, Construction, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const services = [
@@ -43,27 +43,8 @@ const services = [
 
 const Services = () => {
   const [mobileIndex, setMobileIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
-
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? '100%' : '-100%',
-      opacity: 0
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? '100%' : '-100%',
-      opacity: 0
-    })
-  };
 
   const paginate = (newDirection: number) => {
-    setDirection(newDirection);
     setMobileIndex((prevIndex) => (prevIndex + newDirection + services.length) % services.length);
   };
 
@@ -102,30 +83,57 @@ const Services = () => {
         {/* Mobile Slider */}
         <div className="mobile-slider mobile-only">
           <div className="slider-container">
-            <AnimatePresence initial={false} custom={direction}>
-              <motion.div
-                key={mobileIndex}
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.2 }
-                }}
-                className="service-card mobile-card"
-              >
-                <div className="service-image">
-                  <img src={services[mobileIndex].image} alt={services[mobileIndex].title} />
-                </div>
-                <div className="service-icon-box">{services[mobileIndex].icon}</div>
-                <div className="service-info">
-                  <h3>{services[mobileIndex].title}</h3>
-                  <p>{services[mobileIndex].description}</p>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+            <div className="slider-track">
+              {services.map((service, index) => {
+                // Calculate relative position
+                let diff = (index - mobileIndex + services.length) % services.length;
+                if (diff > services.length / 2) diff -= services.length;
+
+                const isActive = diff === 0;
+                const isNext = diff === 1;
+                const isPrev = diff === -1;
+
+                // Animation state
+                const validStyle = isActive ? {
+                  zIndex: 5,
+                  opacity: 1,
+                  scale: 1,
+                  x: '0%',
+                  display: 'block'
+                } : {
+                  zIndex: 0,
+                  opacity: 0,
+                  scale: 0.8,
+                  x: diff > 0 ? '100%' : '-100%',
+                  display: 'none' // Hide after transition to prevent interaction
+                };
+
+                // Allow display block during transition if it's immediate neighbor
+                if (isNext || isPrev) validStyle.display = 'block';
+
+                return (
+                  <motion.div
+                    key={index}
+                    className="service-card mobile-card"
+                    animate={validStyle}
+                    transition={{
+                      x: { type: "spring", stiffness: 300, damping: 30 },
+                      opacity: { duration: 0.2 },
+                      scale: { duration: 0.2 }
+                    }}
+                  >
+                    <div className="service-image">
+                      <img src={service.image} alt={service.title} />
+                    </div>
+                    <div className="service-icon-box">{service.icon}</div>
+                    <div className="service-info">
+                      <h3>{service.title}</h3>
+                      <p>{service.description}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
 
           <div className="slider-controls">
@@ -138,7 +146,6 @@ const Services = () => {
                   key={idx}
                   className={`dot ${idx === mobileIndex ? 'active' : ''}`}
                   onClick={() => {
-                    setDirection(idx > mobileIndex ? 1 : -1);
                     setMobileIndex(idx);
                   }}
                 />

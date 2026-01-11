@@ -65,7 +65,6 @@ const Gallery = () => {
   const [filter, setFilter] = useState('kitchen');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [carouselIndex, setCarouselIndex] = useState(1); // Start with second item for centering logic
-  const [direction, setDirection] = useState(0);
 
   const filteredProjects = projects.filter(p => p.category === filter);
 
@@ -88,28 +87,7 @@ const Gallery = () => {
   };
 
   const navigateCarousel = (dir: number) => {
-    setDirection(dir);
     setCarouselIndex((prev) => (prev + dir + filteredProjects.length) % filteredProjects.length);
-  };
-
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? '100%' : '-100%',
-      opacity: 0,
-      scale: 0.8
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-      scale: 1
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? '100%' : '-100%',
-      opacity: 0,
-      scale: 0.8
-    })
   };
 
   return (
@@ -170,42 +148,69 @@ const Gallery = () => {
           {/* Mobile Centered Carousel */}
           <div className="mobile-only gallery-carousel">
             <div className="carousel-wrapper">
-              <AnimatePresence initial={false} custom={direction} mode="popLayout">
-                {/* Visual logic: Center item is index, left is index-1, right is index+1 */}
-                <motion.div
-                  key={carouselIndex}
-                  custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{
-                    x: { type: "spring", stiffness: 300, damping: 30 },
-                    opacity: { duration: 0.2 }
-                  }}
-                  className="carousel-slide active"
-                  onClick={() => setLightboxIndex(carouselIndex)}
-                >
-                  <img src={filteredProjects[carouselIndex]?.image} alt={filteredProjects[carouselIndex]?.title} />
-                  <div className="slide-info">
-                    <h3>{filteredProjects[carouselIndex]?.title}</h3>
-                  </div>
-                </motion.div>
+              {filteredProjects.map((project, index) => {
+                // Calculate relative position
+                let diff = (index - carouselIndex + filteredProjects.length) % filteredProjects.length;
+                if (diff > filteredProjects.length / 2) diff -= filteredProjects.length;
 
-                {/* Side previews static for layout aid or as separate motion elements? 
-                    Simplest: Use a flexible container that shows part of previous/next.
-                */}
-              </AnimatePresence>
+                const isActive = diff === 0;
+                const isNext = diff === 1;
+                const isPrev = diff === -1;
 
-              {/* Previous Slide Preview */}
-              <div className="carousel-slide prev-preview">
-                <img src={filteredProjects[(carouselIndex - 1 + filteredProjects.length) % filteredProjects.length]?.image} alt="prev" />
-              </div>
+                // Animation state
+                let style = {
+                  zIndex: 0,
+                  opacity: 0,
+                  scale: 0.8,
+                  x: diff > 0 ? '100%' : '-100%',
+                  display: 'none'
+                };
 
-              {/* Next Slide Preview */}
-              <div className="carousel-slide next-preview">
-                <img src={filteredProjects[(carouselIndex + 1) % filteredProjects.length]?.image} alt="next" />
-              </div>
+                if (isActive) {
+                  style = {
+                    zIndex: 10,
+                    opacity: 1,
+                    scale: 1,
+                    x: '0%',
+                    display: 'block'
+                  };
+                } else if (isNext) {
+                  style = {
+                    zIndex: 5,
+                    opacity: 0.6,
+                    scale: 0.85,
+                    x: '85%', // Peek from right
+                    display: 'block'
+                  };
+                } else if (isPrev) {
+                  style = {
+                    zIndex: 5,
+                    opacity: 0.6,
+                    scale: 0.85,
+                    x: '-85%', // Peek from left
+                    display: 'block'
+                  };
+                }
+
+                return (
+                  <motion.div
+                    key={index}
+                    className="carousel-slide"
+                    animate={style}
+                    transition={{
+                      x: { type: "spring", stiffness: 300, damping: 30 },
+                      opacity: { duration: 0.2 },
+                      scale: { duration: 0.2 }
+                    }}
+                    onClick={() => setLightboxIndex(index)}
+                  >
+                    <img src={project.image} alt={project.title} />
+                    <div className="slide-info">
+                      <h3>{project.title}</h3>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
 
             <div className="carousel-controls">
