@@ -220,7 +220,6 @@ const Hero = () => {
             height: 40px;
             top: auto; /* CRITICAL FIX: Reset top position */
             bottom: 1.5rem; /* Position at bottom */
-            transform: none; /* CRITICAL FIX: Remove centering transform */
           }
 
           .slider-nav.prev {
